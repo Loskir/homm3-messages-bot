@@ -1,0 +1,8 @@
+language_name: Русский
+is_enabled: true
+
+common:
+  choose_language: |
+    Выбери язык:
+  welcome: |
+    Привет!
