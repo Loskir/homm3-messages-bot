@@ -47,7 +47,7 @@ const getWebpBuffer = async (text, config) => {
   const sourcePng = generator.exportBuffer()
 
   return sharp(sourcePng)
-    .resize(500)
+    // .resize(500)
     .toFormat(sharp.format.webp)
     .toBuffer()
 }
