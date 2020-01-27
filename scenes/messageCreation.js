@@ -34,6 +34,10 @@ const getConfigKeyboard = (config, colorsKeyboardOpened = false) => {
     )
   }
   return Markup.inlineKeyboard([
+    [
+      Markup.callbackButton(`As a photo`, `config_as_photo`, config.type === 'photo'),
+      Markup.callbackButton(`As a sticker`, `config_as_sticker`, config.type === 'sticker'),
+    ],
     [Markup.callbackButton('Change color', `open_colors_keyboard`)],
     [
       Markup.callbackButton(`${config.buttons_show.ok ? '✅' : ''} OK`, `config_button_ok`),
@@ -42,9 +46,12 @@ const getConfigKeyboard = (config, colorsKeyboardOpened = false) => {
 ])
 }
 
-const getWebpBuffer = async (text, config) => {
+const getPngBuffer = (text, config) => {
   generator.renderWithTextAndConfig(text, config)
-  const sourcePng = generator.exportBuffer()
+  return generator.exportBuffer()
+}
+const getWebpBuffer = async (text, config) => {
+  const sourcePng = getPngBuffer(text, config)
 
   return sharp(sourcePng)
     // .resize(500)
@@ -61,6 +68,7 @@ scene.enter(async (ctx) => {
       ok: true,
       cancel: false,
     },
+    type: 'sticker',
   }
 
   ctx.scene.state.text = ctx.message.text
@@ -99,6 +107,30 @@ scene.action('open_colors_keyboard', async (ctx) => {
 scene.action(/config_button_(.+)/, async (ctx) => {
   await ctx.answerCbQuery()
   ctx.scene.state.config.buttons_show[ctx.match[1]] = !ctx.scene.state.config.buttons_show[ctx.match[1]]
+
+  const webp = await getWebpBuffer(ctx.scene.state.text, ctx.scene.state.config)
+
+  await ctx.deleteMessage()
+  return ctx.replyWithDocument(
+    {source: webp, filename: 'sticker.webp'},
+    Extra.markup(getConfigKeyboard(ctx.scene.state.config, false))
+  )
+})
+scene.action('config_as_photo', async (ctx) => {
+  await ctx.answerCbQuery()
+  ctx.scene.state.config.type = 'photo'
+
+  const png = await getPngBuffer(ctx.scene.state.text, ctx.scene.state.config)
+
+  await ctx.deleteMessage()
+  return ctx.replyWithPhoto(
+    {source: png},
+    Extra.markup(getConfigKeyboard(ctx.scene.state.config, false))
+  )
+})
+scene.action('config_as_sticker', async (ctx) => {
+  await ctx.answerCbQuery()
+  ctx.scene.state.config.type = 'sticker'
 
   const webp = await getWebpBuffer(ctx.scene.state.text, ctx.scene.state.config)
 
