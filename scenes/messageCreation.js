@@ -59,6 +59,12 @@ const getWebpBuffer = async (text, config) => {
     .toBuffer()
 }
 
+const getConfig = (stateConfig) => ({
+  color: stateConfig.color,
+  buttons_show: stateConfig.buttons_show,
+  showShadow: stateConfig.type === 'sticker',
+})
+
 const scene = new Scene('message-creation')
 scene.enter(utils.answerCbQuery)
 scene.enter(async (ctx) => {
@@ -74,7 +80,7 @@ scene.enter(async (ctx) => {
   ctx.scene.state.text = ctx.message.text
   ctx.log.info(ctx.scene.state.text)
 
-  const webp = await getWebpBuffer(ctx.scene.state.text, ctx.scene.state.config)
+  const webp = await getWebpBuffer(ctx.scene.state.text, getConfig(ctx.scene.state.config))
 
   // const jpeg = await pngToJpeg({quality: 90})(sourcePng)
   // const result = await uploadByBuffer(jpeg)
@@ -90,7 +96,7 @@ scene.action(/config_color_(.+)/, async (ctx) => {
   await ctx.answerCbQuery()
   ctx.scene.state.config.color = ctx.match[1]
 
-  const webp = await getWebpBuffer(ctx.scene.state.text, ctx.scene.state.config)
+  const webp = await getWebpBuffer(ctx.scene.state.text, getConfig(ctx.scene.state.config))
 
   await ctx.deleteMessage()
   return ctx.replyWithDocument(
@@ -108,7 +114,7 @@ scene.action(/config_button_(.+)/, async (ctx) => {
   await ctx.answerCbQuery()
   ctx.scene.state.config.buttons_show[ctx.match[1]] = !ctx.scene.state.config.buttons_show[ctx.match[1]]
 
-  const webp = await getWebpBuffer(ctx.scene.state.text, ctx.scene.state.config)
+  const webp = await getWebpBuffer(ctx.scene.state.text, getConfig(ctx.scene.state.config))
 
   await ctx.deleteMessage()
   return ctx.replyWithDocument(
@@ -120,7 +126,7 @@ scene.action('config_as_photo', async (ctx) => {
   await ctx.answerCbQuery()
   ctx.scene.state.config.type = 'photo'
 
-  const png = await getPngBuffer(ctx.scene.state.text, ctx.scene.state.config)
+  const png = await getPngBuffer(ctx.scene.state.text, getConfig(ctx.scene.state.config))
 
   await ctx.deleteMessage()
   return ctx.replyWithPhoto(
@@ -132,7 +138,7 @@ scene.action('config_as_sticker', async (ctx) => {
   await ctx.answerCbQuery()
   ctx.scene.state.config.type = 'sticker'
 
-  const webp = await getWebpBuffer(ctx.scene.state.text, ctx.scene.state.config)
+  const webp = await getWebpBuffer(ctx.scene.state.text, getConfig(ctx.scene.state.config))
 
   await ctx.deleteMessage()
   return ctx.replyWithDocument(
