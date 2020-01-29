@@ -68,21 +68,28 @@ composer.on('inline_query', async (ctx) => {
   // const result = await uploadByBuffer(jpeg)
   // const url = result.link
   // console.log(url)
+
+  const fileId = message.sticker.file_id
+  const fileIdOk = messageOk.sticker.file_id
+  const fileIdOkCancel = messageOkCancel.sticker.file_id
+
+  console.log(fileId, fileIdOk, fileIdOkCancel)
+
   return ctx.answerInlineQuery([
     {
       type: 'sticker',
       id: `${text}`,
-      sticker_file_id: message.sticker.file_id,
+      sticker_file_id: fileId,
     },
     {
       type: 'sticker',
       id: `${text}:ok`,
-      sticker_file_id: messageOk.sticker.file_id,
+      sticker_file_id: fileIdOk,
     },
     {
       type: 'sticker',
       id: `${text}:ok:cancel`,
-      sticker_file_id: messageOkCancel.sticker.file_id,
+      sticker_file_id: fileIdOkCancel,
     },
   ])
 })
