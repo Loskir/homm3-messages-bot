@@ -1,13 +1,14 @@
 const Scene = require('telegraf/scenes/base')
-const sharp = require('sharp')
 const chunk = require('chunk')
 
 const {Extra, Markup} = require('telegraf')
 
 const utils = require('../core/utils')
 
-const Generator = require('../lib/HommMessageGeneratorNodeBindings')
-const generator = new Generator()
+const {
+  getPngBuffer,
+  getWebpBuffer,
+} = require('../functions/core')
 
 const colors = [
   {text: '♥️', value: 'red'},
@@ -46,18 +47,6 @@ const getConfigKeyboard = (config, colorsKeyboardOpened = false) => {
 ])
 }
 
-const getPngBuffer = (text, config) => {
-  generator.renderWithTextAndConfig(text, config)
-  return generator.exportBuffer()
-}
-const getWebpBuffer = async (text, config) => {
-  const sourcePng = getPngBuffer(text, config)
-
-  return sharp(sourcePng)
-    // .resize(500)
-    .toFormat(sharp.format.webp)
-    .toBuffer()
-}
 
 const getConfig = (stateConfig) => ({
   color: stateConfig.color,

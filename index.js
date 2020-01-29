@@ -52,6 +52,8 @@ void (async () => {
 
   bot.use(require('./passThruMiddlewares/lastActivity'))
 
+  bot.use(require('./middlewares/inline'))
+
   bot.catch((error) => {
     log.error('MTPBOT error: ', error)
     console.error(error.stack)
