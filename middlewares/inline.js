@@ -73,22 +73,20 @@ composer.on('inline_query', async (ctx) => {
   const fileIdOk = messageOk.sticker.file_id
   const fileIdOkCancel = messageOkCancel.sticker.file_id
 
-  console.log(fileId, fileIdOk, fileIdOkCancel)
-
   return ctx.answerInlineQuery([
     {
       type: 'sticker',
-      id: `${text}`,
+      id: `${Date.now().toString()}`,
       sticker_file_id: fileId,
     },
     {
       type: 'sticker',
-      id: `${text}:ok`,
+      id: `${Date.now().toString()}:ok`,
       sticker_file_id: fileIdOk,
     },
     {
       type: 'sticker',
-      id: `${text}:ok:cancel`,
+      id: `${Date.now().toString()}:ok:cancel`,
       sticker_file_id: fileIdOkCancel,
     },
   ])
