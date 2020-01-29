@@ -62,7 +62,8 @@ const getWebpBuffer = async (text, config) => {
 const getConfig = (stateConfig) => ({
   color: stateConfig.color,
   buttons_show: stateConfig.buttons_show,
-  showShadow: stateConfig.type === 'sticker',
+  // showShadow: stateConfig.type === 'sticker',
+  showShadow: false, // с тенью стикер пережимает, текст хуже читается
 })
 
 const scene = new Scene('message-creation')
