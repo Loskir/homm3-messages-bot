@@ -41,8 +41,8 @@ const getConfigKeyboard = (config, colorsKeyboardOpened = false) => {
     ],
     [Markup.callbackButton('Change color', `open_colors_keyboard`)],
     [
-      Markup.callbackButton(`${config.buttons_show.ok ? '✅' : ''} OK`, `config_button_ok`),
-      Markup.callbackButton(`${config.buttons_show.cancel ? '✅' : ''} Cancel`, `config_button_cancel`),
+      Markup.callbackButton(`${config.buttons_show.ok ? '✅' : ''} OK button`, `config_button_ok`),
+      Markup.callbackButton(`${config.buttons_show.cancel ? '✅' : ''} Cancel button`, `config_button_cancel`),
     ]
 ])
 }
