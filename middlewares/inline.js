@@ -13,7 +13,7 @@ composer.on('inline_query', async (ctx) => {
   }
   ctx.log.info(`inline: ${text}`)
 
-  const webpBuffer = await getWebpBuffer(
+  /*const webpBuffer = await getWebpBuffer(
     text,
     {
       color: 'red',
@@ -71,23 +71,29 @@ composer.on('inline_query', async (ctx) => {
 
   const fileId = message.sticker.file_id
   const fileIdOk = messageOk.sticker.file_id
-  const fileIdOkCancel = messageOkCancel.sticker.file_id
+  const fileIdOkCancel = messageOkCancel.sticker.file_id*/
 
   return ctx.answerInlineQuery([
     {
-      type: 'sticker',
-      id: `${Date.now().toString()}`,
-      sticker_file_id: fileId,
+      type: 'photo',
+      id: text,
+
+      photo_url: `https://homm3.loskir.ru?text=${text}&show_ok=false`,
+      thumb_url: `https://homm3.loskir.ru?text=${text}&show_ok=false`,
     },
     {
-      type: 'sticker',
-      id: `${Date.now().toString()}:ok`,
-      sticker_file_id: fileIdOk,
+      type: 'photo',
+      id: `${text}_ok`,
+
+      photo_url: `https://homm3.loskir.ru?text=${text}`,
+      thumb_url: `https://homm3.loskir.ru?text=${text}`,
     },
     {
-      type: 'sticker',
-      id: `${Date.now().toString()}:ok:cancel`,
-      sticker_file_id: fileIdOkCancel,
+      type: 'photo',
+      id: `${text}_ok_cancel`,
+
+      photo_url: `https://homm3.loskir.ru?text=${text}&show_cancel=true`,
+      thumb_url: `https://homm3.loskir.ru?text=${text}&show_cancel=true`,
     },
   ])
 })
