@@ -1,16 +1,11 @@
 const Composer = require('telegraf/composer')
 
-const {
-  getWebpBuffer,
-} = require('../functions/core')
+const crypto = require('crypto')
 
 const composer = new Composer()
 
 composer.on('inline_query', async (ctx) => {
   const text = ctx.inlineQuery.query
-  if (text.length === 0) {
-    return
-  }
   ctx.log.info(`inline: ${text}`)
 
   /*const webpBuffer = await getWebpBuffer(
@@ -76,24 +71,24 @@ composer.on('inline_query', async (ctx) => {
   return ctx.answerInlineQuery([
     {
       type: 'photo',
-      id: text,
+      id: crypto.createHash('md5').update(text).digest('hex'),
 
-      photo_url: `https://homm3.loskir.ru?text=${text}&show_ok=false`,
-      thumb_url: `https://homm3.loskir.ru?text=${text}&show_ok=false`,
+      photo_url: `https://homm3.loskir.ru/bot?text=${text}&show_ok=false`,
+      thumb_url: `https://homm3.loskir.ru/bot?text=${text}&show_ok=false`,
     },
     {
       type: 'photo',
-      id: `${text}_ok`,
+      id: crypto.createHash('md5').update(`${text}_ok`).digest('hex'),
 
-      photo_url: `https://homm3.loskir.ru?text=${text}`,
-      thumb_url: `https://homm3.loskir.ru?text=${text}`,
+      photo_url: `https://homm3.loskir.ru/bot?text=${text}`,
+      thumb_url: `https://homm3.loskir.ru/bot?text=${text}`,
     },
     {
       type: 'photo',
-      id: `${text}_ok_cancel`,
+      id: crypto.createHash('md5').update(`${text}_ok_cancel`).digest('hex'),
 
-      photo_url: `https://homm3.loskir.ru?text=${text}&show_cancel=true`,
-      thumb_url: `https://homm3.loskir.ru?text=${text}&show_cancel=true`,
+      photo_url: `https://homm3.loskir.ru/bot?text=${text}&show_cancel=true`,
+      thumb_url: `https://homm3.loskir.ru/bot?text=${text}&show_cancel=true`,
     },
   ])
 })
